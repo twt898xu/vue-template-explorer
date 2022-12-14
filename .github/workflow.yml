@@ -1,0 +1,29 @@
+name: Build and Deploy Vue Template Explorer
+on: [push]
+permissions: 
+  contents: write
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Check Node Version
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14.20.1'
+      
+    - name: Install and Build
+      run: |
+          npm ci
+          npm run build
+
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v4
+      with:
+        token: ${{ secrets.ACCESS_TOKEN_TEMPLATE_EXPLORER }}
+        branch: gh-pages
+        # repository-name: twt898xu/twt898xu.github.io
+        folder: dist
+        commit-message:  Auto deploy by the Vue Template Explorer
